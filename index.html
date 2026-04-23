@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Contador</title>
+    <style>
+        /* Estilização Geral - Mantida */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000; 
+            color: #ffffff; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Fundo de Corações Caindo (heart.png) */
+        #background-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0; 
+        }
+
+        .falling-heart {
+            position: absolute;
+            top: -20px;
+            width: 12.5px; /* Tamanho reduzido em 50% conforme pedido */
+            height: 12.5px;
+            background-image: url('photos/heart.png'); 
+            background-size: contain;
+            background-repeat: no-repeat;
+            image-rendering: pixelated; 
+            opacity: 0.8;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 2; 
+        }
+
+        /* Seção das Fotos e Coração Central */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 0; 
+        }
+
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; 
+            border: 3px solid #ffffff;
+            object-fit: cover;
+            background-color: #333;
+            margin-bottom: 10px;
+        }
+
+        .name {
+            font-size: 20px;
+            font-weight: bold; /* Nomes em Negrito */
+            text-transform: lowercase;
+        }
+
+        /* Coração Central Pulsante (Agora usando heart.png) */
+        .central-heart {
+            width: 50px; /* Mantendo o tamanho do coração original */
+            height: 50px;
+            background-image: url('photos/heart.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            image-rendering: pixelated;
+            animation: pulse 1.5s infinite;
+            margin-top: -30px; /* Alinhamento entre as fotos */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Frase com "à" e Separada */
+        .text {
+            font-size: 28px; 
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-top: 60px; 
+            white-space: nowrap; 
+        }
+
+        #days-count {
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="background-hearts"></div>
+
+    <div class="container">
+        <div class="profile-section">
+            <div class="profile-container">
+                <img src="photos/1.jpg" alt="Yago" class="profile-pic">
+                <span class="name">yago</span>
+            </div>
+            
+            <div class="central-heart"></div>
+            
+            <div class="profile-container">
+                <img src="photos/2.jpeg" alt="Amanda" class="profile-pic">
+                <span class="name">amanda</span>
+            </div>
+        </div>
+
+        <div class="text">
+            estamos apaixonados à <span id="days-count">0</span> dias
+        </div>
+    </div>
+
+    <script>
+        function updateCounter() {
+            // Data inicial: 19 de Abril de 2026
+            const startDate = new Date(2026, 3, 19); 
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            startDate.setHours(0, 0, 0, 0);
+
+            const timeDifference = today - startDate;
+            const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('days-count').innerText = daysDifference < 0 ? 0 : daysDifference;
+        }
+
+        function createHeart() {
+            const container = document.getElementById('background-hearts');
+            const heart = document.createElement('div');
+            heart.classList.add('falling-heart');
+            
+            heart.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 3 + 4;
+            heart.style.animationDuration = duration + 's';
+            
+            container.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        // Frequência de 200ms para chuva intensa
+        setInterval(createHeart, 200);
+
+        updateCounter();
+        setInterval(updateCounter, 3600000);
+    </script>
+</body>
+</html>
